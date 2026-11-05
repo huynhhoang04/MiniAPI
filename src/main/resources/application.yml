@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: job-board
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jobboard
+    username: jobboard
+    password: jobboard
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  flyway:
+    enabled: true
