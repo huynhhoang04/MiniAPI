@@ -57,6 +57,7 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, ex.getMessage(), req, List.of());
     }
 
+    // Chot chan race condition: vi pham UNIQUE(job_id,email) o DB -> 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException ex, HttpServletRequest req) {
         return build(HttpStatus.CONFLICT, "Duplicate or invalid data violates a database constraint", req, List.of());
