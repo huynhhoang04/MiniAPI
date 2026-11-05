@@ -18,6 +18,23 @@ public class JobController {
     @GetMapping("/{id}")
     public JobResponse getById(@PathVariable Long id){ return service.getById(id); }
 
+    @GetMapping
+    public Page<JobResponse> search(@RequestParam(required=false) String keyword,
+                                    @RequestParam(required=false) String location,
+                                    @RequestParam(required=false) JobStatus status,
+                                    @RequestParam(defaultValue="0") int page,
+                                    @RequestParam(defaultValue="10") int size,
+                                    @RequestParam(required=false) String sort){
+        Pageable pageable = PageRequest.of(page, size, parseSort(sort));
+        return service.search(keyword, location, status, pageable);
+    }
+    private Sort parseSort(String sort){
+        if(sort==null||sort.isBlank()) return Sort.unsorted();
+        String[] p=sort.split(",");
+        String field=p[0].trim();
+        Sort.Direction dir = p.length>1 && p[1].trim().equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        return Sort.by(dir, field);
+    }
 
     @PutMapping("/{id}")
     public JobResponse update(@PathVariable Long id, @Valid @RequestBody JobRequest req){ return service.update(id, req); }
